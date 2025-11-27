@@ -1,293 +1,119 @@
 # AdventureWorks-Sales
-# AdventureWorks Sales Analysis (FastAPI + SQLite)
+# 📊 AdventureWorks Sales Analysis (FastAPI + SQLite)
 
-Personal assignment for the AdventureWorks-Sales dataset using  
-FastAPI backend, SQLite database, and basic machine learning.
-
----
-
-## 1. Overview
-
-This project:
-
-- Loads the **AdventureWorks-Sales** dataset into a local **SQLite** database  
-- Performs **data preprocessing**, **EDA**, and **visualization**  
-- Computes **RFM (Recency, Frequency, Monetary)** customer segmentation  
-- Trains a simple **CLV (Customer Lifetime Value)** prediction model  
-- Exposes value-added services through a **FastAPI** backend (analytics + prediction)
-
-No external APIs or API keys are used.  
-All data processing and modeling run locally.
+개인 과제로 AdventureWorks 판매 데이터를 분석하고  
+RFM 세분화 및 CLV 예측 모델을 구축하여 FastAPI로 API 서비스를 제공하였습니다.
 
 ---
 
-## 2. Requirements (Assignment Mapping)
+## 📂 Project Overview
 
-The project is designed to satisfy the given requirements:
-
-1. **Data collection**  
-   - Load AdventureWorks-Sales data into SQLite (`adventureworks.db`)
-
-2. **Data preprocessing**  
-   - Basic cleaning, type conversion, preparation of sales table
-
-3. **Basic statistics and EDA**  
-   - Summary statistics, yearly and regional sales analysis
-
-4. **Visualization (customers, regions, etc.)**  
-   - Sales by year, sales by territory, frequency distribution
-
-5. **RFM Analysis & Customer Segmentation**  
-   - Calculate Recency, Frequency, Monetary  
-   - Assign simple segments (e.g., VIP, Loyal, Regular, At_Risk)
-
-6. **Prediction model (example: CLV regression)**  
-   - Predict Monetary (total spending) using Recency and Frequency
-
-7. **FastAPI dashboard / API**  
-   - Provide JSON endpoints for statistics, segmentation, and predictions
+- 📁 SQLite DB 생성 (sales 테이블)
+- 📈 EDA 분석 및 시각화 (plots/)
+- 🧮 RFM 고객 세분화 (VIP, Loyal, Regular 등)
+- 🤖 CLV 예측 모델(RandomForest) 학습 및 저장
+- 🚀 FastAPI 백엔드로 분석 + 예측 API 제공
 
 ---
 
-## 3. Project Structure
+## 📁 Project Structure
 
-```text
 adventureworks-sales/
-├─ data/
-│  ├─ AdventureWorks_Sales.csv     # Source dataset (provided separately)
-│  └─ adventureworks.db            # SQLite database (created by load_data.py)
 │
-├─ models/
-│  └─ clv_model.pkl                # Trained CLV model (created by train_clv_model.py)
+├── data/
+│ ├── AdventureWorks_Sales.csv
+│ └── adventureworks.db
 │
-├─ plots/
-│  ├─ sales_by_year.png            # EDA plots (created by eda_plots.py)
-│  ├─ sales_by_territory.png
-│  └─ frequency_distribution.png
+├── models/
+│ └── clv_model.pkl
 │
-├─ load_data.py                    # 1. Load CSV into SQLite
-├─ rfm_analysis.py                 # 2–5. RFM analysis and segmentation
-├─ train_clv_model.py              # 6. Train CLV prediction model
-├─ eda_plots.py                    # 3–4. EDA and visualizations
-├─ api.py                          # 7. FastAPI backend (value-added services)
-├─ requirements.txt
-└─ README.md
-4. RFM Analysis
-RFM (Recency, Frequency, Monetary) metrics:
+├── plots/
+│
+├── load_data.py
+├── rfm_analysis.py
+├── eda_plots.py
+├── train_clv_model.py
+├── api.py
+└── README.md
 
-Metric	Definition
-Recency	Days since the customer’s last purchase
-Frequency	Number of purchases made by the customer
-Monetary	Total purchase amount for the customer
+yaml
+코드 복사
 
-rfm_analysis.py:
+---
 
-Reads sales data from data/adventureworks.db (table sales)
-
-Calculates Recency, Frequency, Monetary per CustomerID
-
-Computes simple R/F/M scores and total RFM score
-
-Assigns a segment label (e.g., VIP, Loyal, Regular, At_Risk)
-
-Saves the result to:
-
-SQLite table rfm_segments
-
-CSV file data/rfm_segments.csv
-
-These segments are later served by the FastAPI API.
-
-5. Setup
-5.1. Create Virtual Environment
-bash
-
-python -m venv .venv
-# Windows PowerShell
-. .\.venv\Scripts\Activate.ps1
-# or macOS / Linux
-source .venv/bin/activate
-5.2. Install Dependencies
-bash
+## ⚙️ Setup
 
 pip install -r requirements.txt
-requirements.txt includes:
 
-fastapi
+yaml
+코드 복사
 
-uvicorn
+---
 
-pandas
+## 🧪 Workflow
 
-scikit-learn
-
-joblib
-
-matplotlib
-
-seaborn
-
-pydantic
-
-6. Workflow
-Step 1 — Data Load into SQLite
-Place your dataset as:
-
-text
-
-data/AdventureWorks_Sales.csv
-Then run:
-
-bash
-
+### 1) Load Data to SQLite
 python load_data.py
-This script:
 
-Reads AdventureWorks_Sales.csv
+shell
+코드 복사
 
-Performs basic cleaning
-
-Creates data/adventureworks.db with table sales
-
-Step 2 — RFM Analysis
-bash
-
+### 2) RFM Analysis
 python rfm_analysis.py
-This script:
 
-Reads sales from SQLite
+shell
+코드 복사
 
-Calculates RFM metrics
-
-Creates table rfm_segments in SQLite
-
-Saves data/rfm_segments.csv
-
-Step 3 — EDA and Visualization
-bash
-
+### 3) EDA Visualization
 python eda_plots.py
-This script:
 
-Generates basic EDA plots
+shell
+코드 복사
 
-Saves them into the plots/ directory:
-
-sales_by_year.png
-
-sales_by_territory.png
-
-frequency_distribution.png
-
-Step 4 — Train CLV Prediction Model
-bash
-
+### 4) Train CLV Model
 python train_clv_model.py
-This script:
 
-Uses RFM data (data/rfm_segments.csv)
+yaml
+코드 복사
 
-Trains a simple regression model (RandomForestRegressor)
+---
 
-Predicts Monetary from Recency and Frequency
-
-Saves the model to models/clv_model.pkl
-
-7. FastAPI Backend
-7.1. Run the API
-bash
+## 🚀 Run FastAPI Backend
 
 uvicorn api:app --reload --port 8000
-Open:
 
-API documentation (Swagger UI):
+yaml
+코드 복사
+
+📄 API Docs:  
 http://127.0.0.1:8000/docs
 
-7.2. Available Endpoints
-1) Health Check
-GET /health
+---
 
-Simple status check.
+## 🔌 Endpoints
 
-Response example:
+- GET `/health` – 서버 상태 체크  
+- GET `/stats/summary` – KPI 통계  
+- GET `/rfm/segments` – 고객 RFM 테이블  
+- POST `/predict/clv` – CLV 예측  
 
-json
+---
 
-{
-  "status": "ok"
-}
-2) Summary Statistics
-GET /stats/summary
+## 🔐 External API
 
-Provides basic KPIs from the sales table.
+이 프로젝트는 **외부 API를 전혀 사용하지 않습니다.**
 
-Example response:
+- 로컬 SQLite  
+- 로컬 .pkl 모델  
+- 로컬 FastAPI  
 
-json
+따라서 API Key는 **필요 없습니다.**
 
-{
-  "total_revenue": 1234567.89,
-  "total_customers": 3500,
-  "top_territory": "Northwest",
-  "top_product": 123
-}
-3) RFM Segments
-GET /rfm/segments
+---
 
-Returns list of customers with RFM metrics and segment label.
+## 👤 Author
 
-Example item:
-
-json
-
-{
-  "CustomerID": 11001,
-  "Recency": 23,
-  "Frequency": 7,
-  "Monetary": 950.75,
-  "Segment": "VIP"
-}
-4) CLV Prediction
-POST /predict/clv
-
-Predicts CLV (approximate Monetary value) from Recency and Frequency.
-
-Request JSON:
-
-json
-
-{
-  "recency": 30,
-  "frequency": 5
-}
-Response JSON:
-
-json
-
-{
-  "predicted_clv": 820.45
-}
-8. External APIs and API Keys
-This project does not use any external APIs or third-party services.
-All operations are:
-
-local database (sqlite3)
-
-local ML models (.pkl)
-
-local FastAPI server
-
-Therefore:
-
-No GitHub API key is required
-
-No cloud credentials or tokens are required
-
-The project can run fully offline (given the dataset is available)
-
-9. Author
-Asset Bayan
-Big Data Department, Kyungbok University
-Autumn 2025 — Personal MLOps Assignment
+**Asset Bayan**  
+Kyungbok University • Big Data Department
 
 
